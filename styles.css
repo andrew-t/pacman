@@ -1,0 +1,92 @@
+#board {
+	position: relative;
+}
+
+
+
+#background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-spacing: 0;
+}
+
+td {
+	width: 2em;
+	height: 2em;
+	margin: 0;
+	padding: 0;
+}
+
+td.nothing,
+td.pill,
+td.power-pill {
+	background: black;
+}
+
+td.wall {
+	background: blue;
+}
+
+td.ghost-door {
+	background: pink;
+}
+
+td.pill::before,
+td.power-pill::before {
+	content: '';
+	display: block;
+	background: orange;
+}
+
+td.pill::before {
+	width: 0.4em;
+	height: 0.4em;
+	border-radius: 0.2em;
+	margin: 0.8em;
+}
+
+td.power-pill::before {
+	width: 1.2em;
+	height: 1.2em;
+	border-radius: 0.6em;
+	margin: 0.4em;
+}
+
+#actors {
+	position: absolute;
+	top: -1em;
+	left: -1em
+}
+
+#actors > div {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 4em;
+	height: 4em;
+}
+
+#pac-man {
+	background: yellow;
+	border-radius: 2em;
+}
+
+.ghost {
+	border-radius: 2em 2em 0 0;
+}
+
+.ghost::before {
+	content: '👀';
+	display: block;
+	text-align: center;
+	margin-top: 0.3em;
+	font-size: 2em;
+}
+
+#blinky { background: red; }
+#pinky  { background: pink; }
+#inky   { background: cyan; }
+#clyde  { background: orange; }
+.frightened { background: #3af !important; }
+.dead { background: transparent !important; }
