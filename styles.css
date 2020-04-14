@@ -1,19 +1,45 @@
-#board {
-	position: relative;
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+	background: black;
+	margin: 0;
+	overflow: hidden;
+	font-size: calc(100vmin / 35);
+	font-family: 'Press Start 2P', monospace;
+	color: white;
+	user-select: none;
 }
 
+body.game-over::after {
+	position: absolute;
+	content: 'GAME OVER';
+	top: 0;
+	left: 0;
+	display: block;
+	background: rgba(0, 0, 0, 0.75);
+	line-height: 100vh;
+	width: 100vw;
+	text-align: center;
+}
 
+#board {
+	position: absolute;
+	left: calc(50vw - 14em);
+	top: calc(50vh - 16.5em);
+	width: 28em;
+}
 
 #background {
 	position: absolute;
 	top: 0;
 	left: 0;
+	width: 28em;
 	border-spacing: 0;
 }
 
 td {
-	width: 2em;
-	height: 2em;
+	width: 1em;
+	height: 1em;
 	margin: 0;
 	padding: 0;
 }
@@ -40,48 +66,48 @@ td.power-pill::before {
 }
 
 td.pill::before {
-	width: 0.4em;
-	height: 0.4em;
-	border-radius: 0.2em;
-	margin: 0.8em;
+	width: 0.2em;
+	height: 0.2em;
+	border-radius: 0.1em;
+	margin: 0.4em;
 }
 
 td.power-pill::before {
-	width: 1.2em;
-	height: 1.2em;
-	border-radius: 0.6em;
-	margin: 0.4em;
+	width: 0.6em;
+	height: 0.6em;
+	border-radius: 0.3em;
+	margin: 0.2em;
 }
 
 #actors {
 	position: absolute;
-	top: -1em;
-	left: -1em
+	top: -0.5em;
+	left: -0.5em
 }
 
 #actors > div {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 4em;
-	height: 4em;
+	width: 2em;
+	height: 2em;
 }
 
 #pac-man {
 	background: yellow;
-	border-radius: 2em;
+	border-radius: 1em;
 }
 
 .ghost {
-	border-radius: 2em 2em 0 0;
+	border-radius: 1em 1em 0 0;
 }
 
 .ghost::before {
 	content: '👀';
 	display: block;
 	text-align: center;
-	margin-top: 0.3em;
-	font-size: 2em;
+	margin-top: 0.15em;
+	font-size: 1em;
 }
 
 #blinky { background: red; }
@@ -90,3 +116,17 @@ td.power-pill::before {
 #clyde  { background: orange; }
 .frightened { background: #3af !important; }
 .dead { background: transparent !important; }
+
+#chrome {
+	position: absolute;
+	left: calc(50vw - 14em);
+	bottom: calc(50vh - 16.5em);
+	width: 28em;
+	height: 1em;
+	display: flex;
+}
+
+#lives { flex: auto 1 0; }
+#score { flex: auto 0 0; }
+#lives::before { content: 'Lives: '; }
+#score::before { content: 'Score: '; }

@@ -1,5 +1,7 @@
-import Actor, { Directions } from './Actor.js';
+import Actor from './Actor.js';
 import { BlockTypes } from './Map.js';
+import Directions, { oppositeDirection } from './Directions.js';
+import eventerise from './events.js';
 
 const controls = {
 	ArrowUp: Directions.UP,
@@ -19,8 +21,11 @@ export default class Pacman extends Actor {
 			...args
 		});
 
+		this.reset();
+
 		document.addEventListener('keydown', e => {
 			e.preventDefault();
+			if (!this.isAlive) return;
 			this.desiredDirection = null;
 			const newDirection = controls[e.key];
 			if (this.moving) {
@@ -31,14 +36,20 @@ export default class Pacman extends Actor {
 				this.progress = 0;
 			} else if (newDirection == this.direction)
 				this.moving = true;
-			else if (newDirection == Actor.oppositeDirection(this.direction)) {
+			else if (newDirection == oppositeDirection(this.direction)) {
 				this.uTurn();
 				this.moving = true;
 			}
 		});
 	}
 
+	reset() {
+		this.isAlive = true;
+		super.reset();
+	}
+
 	getNextDirection() {
+		if (!this.isAlive) return null;
 		const allowedDirections = this.allowedNextDirections(),
 			{ desiredDirection } = this;
 		if (desiredDirection && allowedDirections[desiredDirection]) {
@@ -55,6 +66,20 @@ export default class Pacman extends Actor {
 		return tile == BlockTypes.Wall || tile == BlockTypes.GhostDoor;
 	}
 
+	die() {
+		console.log('Pacman died');
+		this.isAlive = false;
+		this.moving = false;
+		this.fire('die');
+	}
+
+	win() {
+		console.log('Pacman won!');
+		for (const ghost of this.ghosts)
+			ghost.stop();
+		this.fire('win');
+	}
+
 	onNewTile() {
 		const currentTile = this.map.get(this.x, this.y);
 
@@ -62,6 +87,13 @@ export default class Pacman extends Actor {
 			for (const ghost of this.ghosts)
 				ghost.frighten();
 
-		this.map.set(this.x, this.y, BlockTypes.Nothing);
+		if (currentTile !== BlockTypes.Nothing) {
+			this.map.set(this.x, this.y, BlockTypes.Nothing);
+			this.fire('eat', currentTile);
+			if (this.map.dotsLeft() == 0)
+				this.win();
+		}
 	}
 }
+
+eventerise(Pacman);

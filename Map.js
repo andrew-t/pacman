@@ -107,6 +107,8 @@ class Map {
 			.filter(x => x)
 			.map(row => row.split('')
 				.map(c => blockTypes[c]));
+		this.width = this.tiles[0].length;
+		this.height = this.tiles.length;
 
 		const mapView = document.getElementById('background');
 		this.tileEls = this.tiles.map(row => {
@@ -131,9 +133,22 @@ class Map {
 		this.draw();
 	}
 
+	dotsLeft() {
+		let n = 0;
+		for (let y = 0; y < this.height; ++y)
+			for (let x = 0; x < this.width; ++x)
+				switch (this.get(x, y)) {
+					case BlockTypes.Dot:
+					case BlockTypes.PowerPill:
+						++n; break;
+					default: break;
+				}
+		return n;
+	}
+
 	draw() {
-		for (let y = 0; y < this.tiles.length; ++y)
-			for (let x = 0; x < this.tiles[y].length; ++x) {
+		for (let y = 0; y < this.height; ++y)
+			for (let x = 0; x < this.width; ++x) {
 				for (const className of allBlockClasses)
 					this.tileEls[y][x].classList.remove(className);
 				const className = blockClasses[this.tiles[y][x]];

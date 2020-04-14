@@ -1,16 +1,19 @@
-import Actor, { Directions } from './Actor.js';
+import Actor from './Actor.js';
 import { BlockTypes } from './Map.js';
+import Directions, { oppositeDirection } from './Directions.js';
 
 export const Modes = {
 	SCATTER: Symbol('Scatter'),
 	CHASE: Symbol('Chase'),
 	FRIGHTENED: Symbol('Frightened'),
-	DEAD: Symbol('Dead')
+	DEAD: Symbol('Dead'),
+	STOPPED: Symbol('Stopped')
 };
 
 const modeClasses = {
 	[Modes.SCATTER]: 'scatter',
 	[Modes.CHASE]: 'chase',
+	[Modes.STOPPED]: 'stopped',
 	[Modes.FRIGHTENED]: 'frightened',
 	[Modes.DEAD]: 'dead'
 };
@@ -18,12 +21,13 @@ const modeClasses = {
 const allModeClasses = [
 	'scatter',
 	'chase',
+	'stopped',
 	'frightened',
 	'dead'
 ];
 
-class Ghost extends Actor {
-	constructor({ favouriteCorner, prey, ...args}) {
+export default class Ghost extends Actor {
+	constructor({ favouriteCorner, prey, cycle, ...args}) {
 		super({
 			speed: 0.75,
 			moving: true,
@@ -32,19 +36,33 @@ class Ghost extends Actor {
 		this.prey = prey;
 		this.el.classList.add('ghost');
 		this.favouriteCorner = favouriteCorner;
-		this.mode = Modes.SCATTER;
+
+		this.cycle = cycle;
+		this.reset();
+	}
+
+	reset() {
+		this.cycleStep = 0;
+		this.mode = this.cycle[0].mode;
+		this.cycleTime = this.cycle[0].time;
+		super.reset();
 	}
 
 	getTarget() {
-		return (this.mode == Modes.SCATTER)
-			? this.favouriteCorner
-			: this.getChaseTarget();
+		switch (this.mode) {
+			case Modes.SCATTER: return this.favouriteCorner;
+			case Modes.CHASE: return this.getChaseTarget();
+			case Modes.DEAD: return { x: 14, y: 14 };
+		}
+		throw new Error('Unexpected ghost mode', this);
 	}
 
 	isWall(x, y) {
 		switch (this.map.get(x, y)) {
 			case BlockTypes.Wall: return true;
 			case BlockTypes.GhostDoor: {
+				if (this.mode == Modes.DEAD)
+					return true;
 				if (this.map.get(this.x, this.y) == BlockTypes.GhostDoor)
 					return false;
 				if (this.y == 14 && this.x > 10 && this.x < 16)
@@ -81,9 +99,13 @@ class Ghost extends Actor {
 	}
 
 	getNextDirection() {
+		if (this.mode == Modes.STOPPED) return null;
+
+		const reverse = oppositeDirection(this.direction);
+
 		const allowedDirections = {
 			...this.allowedNextDirections(),
-			[Actor.oppositeDirection(this.direction)]: false
+			[reverse]: false
 		};
 
 		const bestDirection = this
@@ -92,12 +114,10 @@ class Ghost extends Actor {
 			.sort((a, b) => a.badness - b.badness)
 			[0];
 
-		if (!bestDirection)
-			throw new Error('Ghost trapped');
-
-		return bestDirection
-			? bestDirection.direction
-			: null;
+		// If there is no bestDirection it means we can't go anywhere...
+		// but we must be able to go backwards because we always can.
+		// so we must be in the little ghost house bit
+		return bestDirection ? bestDirection.direction : reverse;
 	}
 
 	getPreyDestination(offset) {
@@ -129,88 +149,44 @@ class Ghost extends Actor {
 	}
 
 	frighten() {
+		console.log(this.name, 'is frightened');
 		this.mode = Modes.FRIGHTENED;
 		this.uTurn();
-	}
-}
-
-export class Blinky extends Ghost {
-	constructor(args) {
-		super({
-			x: 13, y: 11,
-			direction: Directions.RIGHT,
-			progress: 0.5,
-			name: 'blinky',
-			favouriteCorner: { x: 27, y: 0 },
-			...args
-		});
+		// fairly made-up number tbh, 63 is roughly 7s:
+		this.specialModeTime = 63;
 	}
 
-	getChaseTarget() {
-		return this.prey;
-	}
-}
-
-export class Pinky extends Ghost {
-	constructor(args) {
-		super({
-			x: 14, y: 14,
-			direction: Directions.LEFT,
-			progress: 0.5,
-			name: 'pinky',
-			favouriteCorner: { x: 0, y: 0 },
-			...args
-		});
+	die() {
+		console.log(this.name, 'died');
+		this.mode = Modes.DEAD;
+		this.specialModeTime = 100; // see frighten()
 	}
 
-	getChaseTarget() {
-		return this.getPreyDestination(4);
-	}
-}
-
-export class Inky extends Ghost {
-	constructor({ blinky, ...args }) {
-		super({
-			x: 12, y: 14,
-			direction: Directions.RIGHT,
-			progress: 0.5,
-			name: 'inky',
-			favouriteCorner: { x: 27, y: 27 },
-			...args
-		});
-		this.blinky = blinky;
+	stop() {
+		console.log(this.name, 'stopped');
+		this.mode = Modes.STOPPED;
 	}
 
-	getChaseTarget() {
-		const pacman = this.getPreyDestination(2),
-			diff = {
-				x: pacman.x - this.blinky.x,
-				y: pacman.y - this.blinky.y
-			};
-		return {
-			x: pacman.x + diff.x,
-			y: pacman.y + diff.y
-		};
-	}
-}
+	frame(delta) {
+		super.frame(delta);
 
-export class Clyde extends Ghost {
-	constructor(args) {
-		super({
-			x: 16, y: 14,
-			direction: Directions.LEFT,
-			progress: 0.5,
-			name: 'clyde',
-			favouriteCorner: { x: 0, y: 27 },
-			...args
-		});
-	}
+		const currentCycleStep = this.cycle[this.cycleStep];
+		this.cycleTime += delta;
+		if (this.cycleTime >= currentCycleStep.time) {
+			this.cycleTime -= currentCycleStep.time;
+			this.cycleStep++;
+			console.log(this.name, 'moving to', this.cycle[this.cycleStep].mode, 'phase');
+		}
 
-	getChaseTarget() {
-		const dx = this.prey.x - this.x,
-			dy = this.prey.y - this.y;
-		return (dx * dx + dy * dy > 64)
-			? this.prey
-			: this.favouriteCorner;
+		if (this.specialModeTime) {
+			this.specialModeTime -= delta;
+			if (this.specialModeTime <= 0) {
+				console.log(this.name, 'returning to normal mode');
+				this.specialModeTime = null;
+			}
+		}
+
+		if (!this.specialModeTime)
+			this.mode = this.cycle[this.cycleStep].mode;
 	}
 }

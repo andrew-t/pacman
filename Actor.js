@@ -1,11 +1,5 @@
 import { BlockTypes } from './Map.js';
-
-export const Directions = {
-	UP: Symbol('⬆️'),
-	DOWN: Symbol('⬇️'),
-	LEFT: Symbol('⬅️'),
-	RIGHT: Symbol('➡️'),
-};
+import Directions, { oppositeDirection, nextTile } from './Directions.js';
 
 const directionClasses = {
 	[Directions.UP]: 'facing-up',
@@ -22,28 +16,28 @@ const allDirectionClasses = [
 ];
 
 export default class Actor {
-	constructor({ x, y, direction, progress, name, speed, moving, map }) {
-		this.x = x;
-		this.y = y;
-		this.direction = direction || Directions.UP;
-		this.progress = progress || 0;
+	constructor({
+		x, y,
+		direction = Directions.UP,
+		progress = 0,
+		name,
+		speed = 1,
+		moving = false,
+		map
+	}) {
+		this.initialState = { x, y, direction, progress, moving };
 		this.el = document.createElement('div');
-		this.el.id = name;
-		this.speed = speed || 1;
-		this.moving = moving || false;
+		this.el.id = this.name = name;
+		this.speed = speed;
 		this.map = map;
 		document.getElementById('actors')
 			.appendChild(this.el);
-		this.draw();
+		Actor.prototype.reset.call(this); // to avoid calling overrides
 	}
 
-	static oppositeDirection(direction) {
-		switch (direction) {
-			case Directions.UP:    return Directions.DOWN;
-			case Directions.DOWN:  return Directions.UP;
-			case Directions.LEFT:  return Directions.RIGHT;
-			case Directions.RIGHT: return Directions.LEFT;
-		}
+	reset() {
+		Object.assign(this, this.initialState);
+		this.draw();
 	}
 
 	draw() {
@@ -58,7 +52,7 @@ export default class Actor {
 			case Directions.RIGHT: x += this.progress; break;
 		}
 		Object.assign(this.el.style, {
-			transform: `translate(${ x * 2 }em, ${ y * 2 }em)`
+			transform: `translate(${ x }em, ${ y }em)`
 		})
 	}
 
@@ -79,14 +73,27 @@ export default class Actor {
 	uTurn() {
 		if (this.progress > 0) {
 			this.progress = 1 - this.progress;
-			switch (this.direction) {
-				case Directions.UP:    this.y--; break;
-				case Directions.DOWN:  this.y++; break;
-				case Directions.LEFT:  this.x--; break;
-				case Directions.RIGHT: this.x++; break;
-			}
+			this.step();
 		}
-		this.direction = Actor.oppositeDirection(this.direction);
+		this.direction = oppositeDirection(this.direction);
+	}
+
+	step() {
+		Object.assign(this, nextTile(this.x, this.y, this.direction));
+	}
+
+	closestTile() {
+		return this.progress > 0.5
+			? nextTile(this.x, this.y, this.direction)
+			: { x: this.x, y: this. y };
+	}
+
+	isAtop(other) {
+		// this has a bug where pacman and a ghost can swap tiles on the same frame,
+		// but that's a classic pacman bug so I'm leaving it in for now #retrocharm
+		const thisTile = this.closestTile(),
+			otherTile = other.closestTile();
+		return (thisTile.x == otherTile.x) && (thisTile.y == otherTile.y);
 	}
 
 	frame(delta) {
@@ -95,12 +102,7 @@ export default class Actor {
 		this.progress += distance;
 		while (this.progress >= 1) {
 			this.progress -= 1;
-			switch (this.direction) {
-				case Directions.UP:    this.y--; break;
-				case Directions.DOWN:  this.y++; break;
-				case Directions.LEFT:  this.x--; break;
-				case Directions.RIGHT: this.x++; break;
-			}
+			this.step();
 			if (this.x == 0) this.x = 27;
 			else if (this.x == 27) this.x = 0;
 			this.onNewTile();
