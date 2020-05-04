@@ -116,6 +116,7 @@ class Map {
 			mapView.appendChild(tr);
 			return row.map(cell => {
 				const td = document.createElement('td');
+				td.classList.add(`dot-type-${-~(Math.random() * 8)}`);
 				tr.appendChild(td);
 				return td;
 			});
