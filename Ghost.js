@@ -61,13 +61,9 @@ export default class Ghost extends Actor {
 		switch (this.map.get(x, y)) {
 			case BlockTypes.Wall: return true;
 			case BlockTypes.GhostDoor: {
-				if (this.mode == Modes.DEAD)
-					return true;
 				if (this.map.get(this.x, this.y) == BlockTypes.GhostDoor)
 					return false;
-				if (this.y == 14 && this.x > 10 && this.x < 16)
-					return false;
-				return true;
+				return (this.y == 14) == (this.mode == Modes.DEAD);
 			}
 			default: return false;
 		}
@@ -149,6 +145,12 @@ export default class Ghost extends Actor {
 	}
 
 	frighten() {
+		if (this.mode == Modes.DEAD) {
+			// this logic is a bit made up but it probably works
+			if (this.specialModeTime < 63)
+				this.specialModeTime = 63;
+			return;
+		}
 		console.log(this.name, 'is frightened');
 		this.mode = Modes.FRIGHTENED;
 		this.uTurn();
@@ -171,9 +173,9 @@ export default class Ghost extends Actor {
 		super.frame(delta);
 
 		const currentCycleStep = this.cycle[this.cycleStep];
-		this.cycleTime += delta;
-		if (this.cycleTime >= currentCycleStep.time) {
-			this.cycleTime -= currentCycleStep.time;
+		this.cycleTime -= delta;
+		if (this.cycleTime <= 0) {
+			this.cycleTime += currentCycleStep.time;
 			this.cycleStep++;
 			console.log(this.name, 'moving to', this.cycle[this.cycleStep].mode, 'phase');
 		}

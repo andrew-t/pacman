@@ -10,9 +10,8 @@ body {
 	user-select: none;
 }
 
-body.game-over::after {
+body::after {
 	position: absolute;
-	content: 'GAME OVER';
 	top: 0;
 	left: 0;
 	display: block;
@@ -21,6 +20,9 @@ body.game-over::after {
 	width: 100vw;
 	text-align: center;
 }
+
+body.game-over::after { content: 'GAME OVER'; }
+body.you-win::after { content: 'CONGRATULATIONS!'; }
 
 #board {
 	position: absolute;

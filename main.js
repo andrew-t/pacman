@@ -61,6 +61,10 @@ pacman.on('eat', pill => {
 	drawChrome();
 });
 
+pacman.on('win', () => {
+	document.body.classList.add('you-win');
+});
+
 function frame(timestamp) {
 	requestAnimationFrame(frame);
 	const delta = Math.min(timestamp - lastTime, 150);

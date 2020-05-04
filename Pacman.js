@@ -25,7 +25,7 @@ export default class Pacman extends Actor {
 
 		document.addEventListener('keydown', e => {
 			e.preventDefault();
-			if (!this.isAlive) return;
+			if (!this.isAlive || this.won) return;
 			this.desiredDirection = null;
 			const newDirection = controls[e.key];
 			if (this.moving) {
@@ -49,7 +49,7 @@ export default class Pacman extends Actor {
 	}
 
 	getNextDirection() {
-		if (!this.isAlive) return null;
+		if (!this.isAlive || this.won) return null;
 		const allowedDirections = this.allowedNextDirections(),
 			{ desiredDirection } = this;
 		if (desiredDirection && allowedDirections[desiredDirection]) {
@@ -77,6 +77,8 @@ export default class Pacman extends Actor {
 		console.log('Pacman won!');
 		for (const ghost of this.ghosts)
 			ghost.stop();
+		this.won = true;
+		this.moving = false;
 		this.fire('win');
 	}
 
