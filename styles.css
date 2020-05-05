@@ -107,12 +107,8 @@ td.pill.dot-type-8::before { background-position: 100% 100%; }
 	font-size: 1em;
 }
 
-#blinky { background: red; }
-#pinky  { background: pink; }
-#inky   { background: cyan; }
-#clyde  { background: orange; }
-.frightened { background: #3af !important; }
-.dead { background: transparent !important; }
+.frightened { filter: sepia(100%) hue-rotate(130deg); }
+.dead { opacity: 25%; }
 
 #chrome {
 	position: absolute;
@@ -144,14 +140,14 @@ td.pill.dot-type-8::before { background-position: 100% 100%; }
 	background-image: url('images/pacman/right1.png');
 	background-repeat: no-repeat;
 }
-
-#pac-man.facing-down::before { background-image: url('images/pacman/down.png'); }
-#pac-man.facing-right::before { animation: pacman-right 1s infinite; }
-#pac-man.facing-left::before {
-	animation: pacman-right 1s infinite;
+#actors > div.facing-left::before {
 	transform: scaleX(-1);
 }
-#pac-man.facing-up::before { animation: pacman-up 1s infinite; }
+
+#pac-man.facing-down::before { background-image: url('images/pacman/down.png'); }
+#pac-man.facing-right::before,
+#pac-man.facing-left::before { animation: pacman-right 1s infinite; }
+#pac-man.facing-up::before   { animation: pacman-up    1s infinite; }
 @keyframes pacman-right {
 	0%   { background-image: url('images/pacman/right1.png'); }
 	25%  { background-image: url('images/pacman/right2.png'); }
@@ -166,3 +162,37 @@ td.pill.dot-type-8::before { background-position: 100% 100%; }
 	75%  { background-image: url('images/pacman/up4.png'); }
 	100% { background-image: url('images/pacman/up1.png'); }
 }
+
+#blinky.facing-down::before { background-image: url('images/blinky/down.png'); }
+#blinky.facing-right::before,
+#blinky.facing-left::before { animation: blinky-right 1s infinite; }
+#blinky.facing-up::before   { animation: blinky-up    1s infinite; }
+@keyframes blinky-right {
+	0%   { background-image: url('images/blinky/right1.png'); }
+	25%  { background-image: url('images/blinky/right2.png'); }
+	50%  { background-image: url('images/blinky/right3.png'); }
+	75%  { background-image: url('images/blinky/right4.png'); }
+	100% { background-image: url('images/blinky/right1.png'); }
+}
+@keyframes blinky-up {
+	0%   { background-image: url('images/blinky/up1.png'); }
+	25%  { background-image: url('images/blinky/up2.png'); }
+	50%  { background-image: url('images/blinky/up3.png'); }
+	75%  { background-image: url('images/blinky/up4.png'); }
+	100% { background-image: url('images/blinky/up1.png'); }
+}
+
+#pinky.facing-down::before { background-image: url('images/blinky/down.png'); }
+#pinky.facing-right::before,
+#pinky.facing-left::before { animation: blinky-right 1s infinite; }
+#pinky.facing-up::before   { animation: blinky-up    1s infinite; }
+
+#inky.facing-down::before { background-image: url('images/blinky/down.png'); }
+#inky.facing-right::before,
+#inky.facing-left::before { animation: blinky-right 1s infinite; }
+#inky.facing-up::before   { animation: blinky-up    1s infinite; }
+
+#clyde.facing-down::before { background-image: url('images/blinky/down.png'); }
+#clyde.facing-right::before,
+#clyde.facing-left::before { animation: blinky-right 1s infinite; }
+#clyde.facing-up::before   { animation: blinky-up    1s infinite; }
