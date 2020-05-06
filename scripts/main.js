@@ -29,6 +29,30 @@ const map = generateMap(),
 	actors = [ pacman, ...ghosts ];
 pacman.ghosts = ghosts;
 
+//start
+const mapstuff = new Set();
+for (let x = 1; x <= map.width; ++x)
+for (let y = 1; y <= map.height; ++y){
+const m = map.get(x,y);
+if (m == BlockTypes.Wall || m == BlockTypes.GhostDoor)
+{
+	let s = '';
+	for (let u = -1; u < 2; ++u) {
+		for (let v = -1; v < 2; ++v)
+		{
+			const m = map.get(x+u,y+v);
+			s += (m == BlockTypes.Wall || m == BlockTypes.GhostDoor) ? '*' : '-';
+		}
+		s+='\n';
+	}
+	if (!mapstuff.has(s) && mapstuff.size > 20)
+		console.log({s,x,y})
+	mapstuff.add(s);
+}
+}
+console.log([...mapstuff].map((m,i)=>`${i+1}.\n${m}`).join('\n'))
+// end
+
 let lastTime = 0;
 
 let lives = 3, score = 0;

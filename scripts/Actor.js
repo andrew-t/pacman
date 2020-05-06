@@ -103,8 +103,8 @@ export default class Actor {
 		while (this.progress >= 1) {
 			this.progress -= 1;
 			this.step();
-			if (this.x == 0) this.x = 27;
-			else if (this.x == 27) this.x = 0;
+			if (this.x == 0) this.x = 29;
+			else if (this.x == 29) this.x = 0;
 			this.onNewTile();
 			const nextDirection = this.getNextDirection();
 			if (nextDirection)

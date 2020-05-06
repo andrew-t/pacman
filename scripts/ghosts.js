@@ -4,7 +4,7 @@ import Directions from './Directions.js';
 export class Blinky extends Ghost {
 	constructor(args) {
 		super({
-			x: 13, y: 11,
+			x: 14, y: 12,
 			direction: Directions.RIGHT,
 			progress: 0.5,
 			name: 'blinky',
@@ -21,7 +21,7 @@ export class Blinky extends Ghost {
 export class Pinky extends Ghost {
 	constructor(args) {
 		super({
-			x: 14, y: 14,
+			x: 15, y: 15,
 			direction: Directions.LEFT,
 			progress: 0.5,
 			name: 'pinky',
@@ -38,7 +38,7 @@ export class Pinky extends Ghost {
 export class Inky extends Ghost {
 	constructor({ blinky, ...args }) {
 		super({
-			x: 12, y: 14,
+			x: 13, y: 15,
 			direction: Directions.RIGHT,
 			progress: 0.5,
 			name: 'inky',
@@ -64,7 +64,7 @@ export class Inky extends Ghost {
 export class Clyde extends Ghost {
 	constructor(args) {
 		super({
-			x: 16, y: 14,
+			x: 17, y: 15,
 			direction: Directions.LEFT,
 			progress: 0.5,
 			name: 'clyde',

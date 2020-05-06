@@ -4,7 +4,7 @@ body {
 	background: black;
 	margin: 0;
 	overflow: hidden;
-	font-size: calc(100vmin / 35);
+	font-size: calc(100vmin / 37);
 	font-family: 'Press Start 2P', monospace;
 	color: white;
 	user-select: none;
@@ -27,7 +27,7 @@ body.you-win::after { content: 'CONGRATULATIONS!'; }
 #board {
 	position: absolute;
 	left: calc(50vw - 14em);
-	top: calc(50vh - 16.5em);
+	top: calc(50vh - 17.5em);
 	width: 28em;
 }
 
@@ -84,7 +84,7 @@ td.pill.dot-type-8::before { background-position: 100% 100%; }
 #actors {
 	position: absolute;
 	top: -1em;
-	left: -1em
+	left: -2em
 }
 
 #actors > div {

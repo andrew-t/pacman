@@ -13,7 +13,7 @@ const controls = {
 export default class Pacman extends Actor {
 	constructor(args) {
 		super({
-			x: 13, y: 23,
+			x: 14, y: 24,
 			direction: Directions.RIGHT,
 			progress: 0.5,
 			name: 'pac-man',
