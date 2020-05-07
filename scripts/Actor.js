@@ -53,7 +53,8 @@ export default class Actor {
 			case Directions.RIGHT: x += this.progress; break;
 		}
 		Object.assign(this.el.style, {
-			transform: `translate(${ x }em, ${ y }em)`
+			transform: `translate(${ x }em, ${ y }em)`,
+			zIndex: y
 		})
 	}
 

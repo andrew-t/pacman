@@ -19,6 +19,7 @@ body::after {
 	line-height: 100vh;
 	width: 100vw;
 	text-align: center;
+	z-index: 1000;
 }
 
 body.game-over::after { content: 'GAME OVER'; }
@@ -39,7 +40,7 @@ body.you-win::after { content: 'CONGRATULATIONS!'; }
 	position: absolute;
 }
 
-.map.wall {
+.map.unstyled-wall {
 	background: blue;
 }
 
@@ -110,6 +111,44 @@ body.you-win::after { content: 'CONGRATULATIONS!'; }
 #lives::before { content: 'Lives: '; }
 #score::before { content: 'Score: '; }
 
+
+/* WALL PARTS */
+
+.map.wall::before {
+	width: 100%;
+	height: 200%;
+	content: '';
+	position: absolute;
+	display: block;
+	top: -100;
+	left: 0;
+	background-size: cover;
+	background-position: 50% 50%;
+	background-image: url('images/map.png');
+	background-repeat: no-repeat;
+}
+.map.internal-wall::before { background-position: -7em 50%; }
+.map.bottom-wall::before { background-position: -3em 50%; }
+.map.bottom-right-convex-wall::before,
+.map.bottom-left-convex-wall::before { background-position: 0 50%; }
+.map.bottom-right-concave-wall::before,
+.map.bottom-left-concave-wall::before { background-position: -5em 50%; }
+.map.top-wall::before { background-position: -4em 50%; }
+.map.top-right-convex-wall::before,
+.map.top-left-convex-wall::before { background-position: -1em 50%; }
+.map.top-right-concave-wall::before,
+.map.top-left-concave-wall::before { background-position: -6em 50%; }
+.map.right-wall::before,
+.map.left-wall::before { background-position: -2em 50%; }
+
+.map.bottom-right-convex-wall::before,
+.map.top-right-convex-wall::before,
+.map.bottom-left-concave-wall::before,
+.map.top-left-concave-wall::before,
+.map.right-wall::before
+{ transform: scaleX(-1); }
+
+.map.unstyled-wall::before { display: none; }
 
 /* ANIMATIONS */
 
