@@ -27,10 +27,11 @@ export default class Actor {
 	}) {
 		this.initialState = { x, y, direction, progress, moving };
 		this.el = document.createElement('div');
+		this.el.classList.add('actor');
 		this.el.id = this.name = name;
 		this.speed = speed;
 		this.map = map;
-		document.getElementById('actors')
+		document.getElementById('board')
 			.appendChild(this.el);
 		Actor.prototype.reset.call(this); // to avoid calling overrides
 	}

@@ -101,29 +101,32 @@ class Map {
 		// Build elements and tiles object in one pass:
 		this.tiles = [];
 		this.tileEls = [];
-		const mapView = document.getElementById('background');
+		const board = document.getElementById('board');
 		for (const row of map.split('\n').filter(x => x)) {
 			const tilesRow = [];
 			this.tiles.push(tilesRow);
 			const tileElsRow = [];
 			this.tileEls.push(tileElsRow);
-			const tr = document.createElement('tr');
-			mapView.appendChild(tr);
 			for (const c of row.split('')) {
 				const type = blockTypes[c];
 				tilesRow.push(type);
-				const td = document.createElement('td');
+				const el = document.createElement('div');
+				el.classList.add('map');
+				Object.assign(el.style, {
+					left: `${ tilesRow.length - 1 }em`,
+					top: `${ this.tiles.length - 1 }em`
+				});
 				switch (type) {
 					case BlockTypes.Dot:
-						td.classList.add(`dot-type-${-~(Math.random() * 8)}`);
+						el.classList.add(`dot-type-${-~(Math.random() * 8)}`);
 						break;
 					case BlockTypes.Wall:
 					case BlockTypes.GhostDoor:
-						td.classList.add(wallClasses[c]);
+						el.classList.add(wallClasses[c]);
 						break;
 				}
-				tr.appendChild(td);
-				tileElsRow.push(td);
+				board.appendChild(el);
+				tileElsRow.push(el);
 			}
 		}
 
