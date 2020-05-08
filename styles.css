@@ -30,6 +30,12 @@ body.you-win::after { content: 'CONGRATULATIONS!'; }
 	left: calc(50vw - 14em);
 	top: calc(50vh - 16.5em);
 	width: 28em;
+	height: 31em;
+	background-color: #A4906A;
+	background-image: url('images/tape.png');
+	background-size: 8em 4em;
+	background-position: 10em 13.5em;
+	background-repeat: no-repeat;
 }
 
 .map {
@@ -38,14 +44,6 @@ body.you-win::after { content: 'CONGRATULATIONS!'; }
 	margin: 0;
 	padding: 0;
 	position: absolute;
-}
-
-.map.unstyled-wall {
-	background: blue;
-}
-
-.map.ghost-door {
-	background: pink;
 }
 
 .map.pill::before,
@@ -122,24 +120,23 @@ body.you-win::after { content: 'CONGRATULATIONS!'; }
 	display: block;
 	top: -100;
 	left: 0;
-	background-size: cover;
-	background-position: 50% 50%;
+	background-size: 12.5em 3em;
 	background-image: url('images/map.png');
 	background-repeat: no-repeat;
 }
-.map.internal-wall::before { background-position: -7em 50%; }
-.map.bottom-wall::before { background-position: -3em 50%; }
+.map.internal-wall::before { background-position: -11em -0.5em; }
+.map.bottom-wall::before { background-position: -5em -1.5em; height: 1.2em; }
 .map.bottom-right-convex-wall::before,
-.map.bottom-left-convex-wall::before { background-position: 0 50%; }
+.map.bottom-left-convex-wall::before { background-position: -0.5em -0.5em; }
 .map.bottom-right-concave-wall::before,
-.map.bottom-left-concave-wall::before { background-position: -5em 50%; }
-.map.top-wall::before { background-position: -4em 50%; }
+.map.bottom-left-concave-wall::before { background-position: -8em -0.5em; }
+.map.top-wall::before { background-position: -6.5em -0.5em; }
 .map.top-right-convex-wall::before,
-.map.top-left-convex-wall::before { background-position: -1em 50%; }
+.map.top-left-convex-wall::before { background-position: -2em -1.5em; height: 1.2em; }
 .map.top-right-concave-wall::before,
-.map.top-left-concave-wall::before { background-position: -6em 50%; }
+.map.top-left-concave-wall::before { background-position: -9.5em -0.5em; }
 .map.right-wall::before,
-.map.left-wall::before { background-position: -2em 50%; }
+.map.left-wall::before { background-position: -3.5em -0.5em; }
 
 .map.bottom-right-convex-wall::before,
 .map.top-right-convex-wall::before,

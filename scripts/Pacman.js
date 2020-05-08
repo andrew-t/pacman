@@ -24,10 +24,11 @@ export default class Pacman extends Actor {
 		this.reset();
 
 		document.addEventListener('keydown', e => {
-			e.preventDefault();
 			if (!this.isAlive || this.won) return;
-			this.desiredDirection = null;
 			const newDirection = controls[e.key];
+			if (!newDirection) return;
+			this.desiredDirection = null;
+			e.preventDefault();
 			if (this.moving) {
 				this.desiredDirection = newDirection;
 			} else if (this.progress < 0.25) {
