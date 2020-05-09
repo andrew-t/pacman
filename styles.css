@@ -10,20 +10,35 @@ body {
 	user-select: none;
 }
 
+body.title-screen #board,
+body.title-screen #chrome,
+body:not(.title-screen) #title
+{ display: none; }
+
+#title {
+
+}
+
+body::before,
 body::after {
 	position: absolute;
-	top: 0;
 	left: 0;
 	display: block;
-	background: rgba(0, 0, 0, 0.75);
 	line-height: 100vh;
 	width: 100vw;
 	text-align: center;
 	z-index: 100000;
 }
+body::before {
+	top: -1em;
+	background: rgba(0, 0, 0, 0.75);
+}
+body::after { top: 1em; }
 
-body.game-over::after { content: 'GAME OVER'; }
-body.you-win::after { content: 'CONGRATULATIONS!'; }
+body:not(.title-screen).game-over::before { content: 'GAME OVER'; }
+body.you-win::before { content: 'CONGRATULATIONS!'; }
+body:not(.title-screen).game-over::after,
+body.you-win::after { content: 'Press SPACE to play again'; }
 
 #board {
 	position: absolute;
