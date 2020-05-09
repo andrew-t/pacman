@@ -19,7 +19,7 @@ body::after {
 	line-height: 100vh;
 	width: 100vw;
 	text-align: center;
-	z-index: 1000;
+	z-index: 100000;
 }
 
 body.game-over::after { content: 'GAME OVER'; }
@@ -204,10 +204,24 @@ body.you-win::after { content: 'CONGRATULATIONS!'; }
 	100% { background-image: url('images/blinky/up1.png'); }
 }
 
-#pinky.facing-down::before { background-image: url('images/blinky/down.png'); }
+#pinky.facing-down::before { background-image: url('images/pinky/down.png'); }
 #pinky.facing-right::before,
-#pinky.facing-left::before { animation: blinky-right 1s infinite; }
-#pinky.facing-up::before   { animation: blinky-up    1s infinite; }
+#pinky.facing-left::before { animation: pinky-right 1s infinite; }
+#pinky.facing-up::before   { animation: pinky-up    1s infinite; }
+@keyframes pinky-right {
+	0%   { background-image: url('images/pinky/right1.png'); }
+	25%  { background-image: url('images/pinky/right2.png'); }
+	50%  { background-image: url('images/pinky/right3.png'); }
+	75%  { background-image: url('images/pinky/right4.png'); }
+	100% { background-image: url('images/pinky/right1.png'); }
+}
+@keyframes pinky-up {
+	0%   { background-image: url('images/pinky/up1.png'); }
+	25%  { background-image: url('images/pinky/up2.png'); }
+	50%  { background-image: url('images/pinky/up3.png'); }
+	75%  { background-image: url('images/pinky/up4.png'); }
+	100% { background-image: url('images/pinky/up1.png'); }
+}
 
 #inky.facing-down::before { background-image: url('images/blinky/down.png'); }
 #inky.facing-right::before,

@@ -54,7 +54,7 @@ export default class Actor {
 		}
 		Object.assign(this.el.style, {
 			transform: `translate(${ x }em, ${ y }em)`,
-			zIndex: y
+			zIndex: ~~(y * 100)
 		})
 	}
 

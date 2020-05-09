@@ -115,7 +115,7 @@ class Map {
 				Object.assign(el.style, {
 					left: `${ tilesRow.length - 1 }em`,
 					top: `${ this.tiles.length - 1 }em`,
-					zIndex: this.tiles.length - 1
+					zIndex: this.tiles.length * 100 - 100
 				});
 				switch (type) {
 					case BlockTypes.Dot:
