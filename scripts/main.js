@@ -19,10 +19,18 @@ const cycle = [
 	{ mode: GhostModes.CHASE,   time: Infinity },
 ];
 
-document.addEventListener('keypress', e => {
+let synth;
+
+document.addEventListener('keypress', async e => {
 	if (e.key != ' ') return;
 	e.preventDefault();
-	if (document.body.classList.contains('game-over')) playGame();
+	if (!synth) {
+		await Tone.start();
+		synth = new Tone.Synth().toMaster();
+	}
+	if (document.body.classList.contains('game-over')
+		|| document.body.classList.contains('you-win'))
+		playGame();
 });
 
 function playGame() {
@@ -54,10 +62,15 @@ function playGame() {
 
 	pacman.on('die', () => {
 		lives--;
+		synth.triggerAttackRelease('B4', 0.3);
+		synth.triggerAttackRelease('A4', 0.3, "+0.3");
+		synth.triggerAttackRelease('G4', 0.3, "+0.6");
+		synth.triggerAttackRelease('F#4', 0.3, "+0.9");
+		synth.triggerAttackRelease('E4', 0.3, "+1.2");
 		if (lives > 0)
 			setTimeout(() => {
 				for (const actor of actors) actor.reset();
-			}, 1000);
+			}, 1500);
 		else {
 			document.body.classList.add('game-over');
 			for (const ghost of ghosts) ghost.stop();
@@ -65,15 +78,29 @@ function playGame() {
 		drawChrome();
 	});
 
+	let odd = false;
 	pacman.on('eat', pill => {
 		switch (pill) {
-			case BlockTypes.Dot: score += 10; break;
-			case BlockTypes.PowerPill: score += 50; break;
+			case BlockTypes.Dot:
+				score += 10;
+				odd = !odd;
+				synth.triggerAttackRelease(odd ? 'E4' : 'F4', '32n');
+				break;
+			case BlockTypes.PowerPill:
+				score += 50;
+				synth.triggerAttackRelease('G#4', '32n');
+				break;
 		}
 		drawChrome();
 	});
 
 	pacman.on('win', () => {
+		for (const ghost of ghosts) ghost.stop();
+		synth.triggerAttackRelease('E4', 0.3);
+		synth.triggerAttackRelease('F#4', 0.3, "+0.3");
+		synth.triggerAttackRelease('G#4', 0.3, "+0.6");
+		synth.triggerAttackRelease('A4', 0.3, "+0.9");
+		synth.triggerAttackRelease('B4', 0.3, "+1.2");
 		document.body.classList.add('you-win');
 	});
 
