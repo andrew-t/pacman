@@ -16,7 +16,18 @@ body:not(.title-screen) #title
 { display: none; }
 
 #title {
-
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-color: rgba(0, 0, 0, 0.75);
+	width: 100vw;
+	height: 100vh;
+	text-align: center;
+}
+#title img {
+	width: 75vmin;
+	display: block;
+	margin: 5em auto;
 }
 
 /* this just precaches all the assets */
@@ -314,7 +325,22 @@ body.you-win::after { content: 'Press SPACE to play again'; }
 	75%  { background-image: url('images/inky/up4.png'); }
 	100% { background-image: url('images/inky/up1.png'); }
 }
-#clyde.facing-down::before { background-image: url('images/blinky/down.png'); }
+
+#clyde.facing-down::before { background-image: url('images/clyde/down.png'); }
 #clyde.facing-right::before,
-#clyde.facing-left::before { animation: blinky-right 1s infinite; }
-#clyde.facing-up::before   { animation: blinky-up    1s infinite; }
+#clyde.facing-left::before { animation: clyde-right 1s infinite; }
+#clyde.facing-up::before   { animation: clyde-up    1s infinite; }
+@keyframes clyde-right {
+	0%   { background-image: url('images/clyde/right1.png'); }
+	25%  { background-image: url('images/clyde/right2.png'); }
+	50%  { background-image: url('images/clyde/right3.png'); }
+	75%  { background-image: url('images/clyde/right4.png'); }
+	100% { background-image: url('images/clyde/right1.png'); }
+}
+@keyframes clyde-up {
+	0%   { background-image: url('images/clyde/up1.png'); }
+	25%  { background-image: url('images/clyde/up2.png'); }
+	50%  { background-image: url('images/clyde/up3.png'); }
+	75%  { background-image: url('images/clyde/up4.png'); }
+	100% { background-image: url('images/clyde/up1.png'); }
+}
