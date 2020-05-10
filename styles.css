@@ -19,6 +19,64 @@ body:not(.title-screen) #title
 
 }
 
+/* this just precaches all the assets */
+#title::before {
+	position: absolute;
+	left: -10000vmax;
+	width: 0.01vmin;
+	content: '';
+	display: block;
+	background-image:
+		url('images/map.png'),
+		url('images/products.png'),
+		url('images/tape.png'),
+		url('images/pacman/right1.png'),
+		url('images/pacman/right2.png'),
+		url('images/pacman/right3.png'),
+		url('images/pacman/right4.png'),
+		url('images/pacman/down1.png'),
+		url('images/pacman/down2.png'),
+		url('images/pacman/down3.png'),
+		url('images/pacman/down4.png'),
+		url('images/pacman/up4.png'),
+		url('images/inky/right1.png'),
+		url('images/inky/right2.png'),
+		url('images/inky/right3.png'),
+		url('images/inky/right4.png'),
+		url('images/inky/down1.png'),
+		url('images/inky/down2.png'),
+		url('images/inky/down3.png'),
+		url('images/inky/down4.png'),
+		url('images/inky/up4.png'),
+		url('images/blinky/right1.png'),
+		url('images/blinky/right2.png'),
+		url('images/blinky/right3.png'),
+		url('images/blinky/right4.png'),
+		url('images/blinky/down1.png'),
+		url('images/blinky/down2.png'),
+		url('images/blinky/down3.png'),
+		url('images/blinky/down4.png'),
+		url('images/blinky/up4.png'),
+		url('images/pinky/right1.png'),
+		url('images/pinky/right2.png'),
+		url('images/pinky/right3.png'),
+		url('images/pinky/right4.png'),
+		url('images/pinky/down1.png'),
+		url('images/pinky/down2.png'),
+		url('images/pinky/down3.png'),
+		url('images/pinky/down4.png'),
+		url('images/pinky/up4.png'),
+		url('images/clyde/right1.png'),
+		url('images/clyde/right2.png'),
+		url('images/clyde/right3.png'),
+		url('images/clyde/right4.png'),
+		url('images/clyde/down1.png'),
+		url('images/clyde/down2.png'),
+		url('images/clyde/down3.png'),
+		url('images/clyde/down4.png'),
+		url('images/clyde/up4.png');
+}
+
 body::before,
 body::after {
 	position: absolute;
@@ -238,11 +296,24 @@ body.you-win::after { content: 'Press SPACE to play again'; }
 	100% { background-image: url('images/pinky/up1.png'); }
 }
 
-#inky.facing-down::before { background-image: url('images/blinky/down.png'); }
+#inky.facing-down::before { background-image: url('images/inky/down.png'); }
 #inky.facing-right::before,
-#inky.facing-left::before { animation: blinky-right 1s infinite; }
-#inky.facing-up::before   { animation: blinky-up    1s infinite; }
-
+#inky.facing-left::before { animation: inky-right 1s infinite; }
+#inky.facing-up::before   { animation: inky-up    1s infinite; }
+@keyframes inky-right {
+	0%   { background-image: url('images/inky/right1.png'); }
+	25%  { background-image: url('images/inky/right2.png'); }
+	50%  { background-image: url('images/inky/right3.png'); }
+	75%  { background-image: url('images/inky/right4.png'); }
+	100% { background-image: url('images/inky/right1.png'); }
+}
+@keyframes inky-up {
+	0%   { background-image: url('images/inky/up1.png'); }
+	25%  { background-image: url('images/inky/up2.png'); }
+	50%  { background-image: url('images/inky/up3.png'); }
+	75%  { background-image: url('images/inky/up4.png'); }
+	100% { background-image: url('images/inky/up1.png'); }
+}
 #clyde.facing-down::before { background-image: url('images/blinky/down.png'); }
 #clyde.facing-right::before,
 #clyde.facing-left::before { animation: blinky-right 1s infinite; }
